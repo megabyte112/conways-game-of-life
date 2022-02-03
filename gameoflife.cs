@@ -12,11 +12,11 @@ namespace gameoflife
         Texture2D square;
         SpriteFont font;
         Random r = new Random();
-        static int height = 60;
-        static int width = 100;
+        static int height;
+        static int width;
         const int cellwidth = 16;
-        bool[,] grid = new bool[height, width];
-        int[,] adjacent = new int[height, width];
+        bool[,] grid;
+        int[,] adjacent;
         MouseState mouse = Mouse.GetState();
         KeyboardState keyboard = Keyboard.GetState();
         bool advance = true;
@@ -32,10 +32,10 @@ namespace gameoflife
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferHeight = height * cellwidth;
-            _graphics.PreferredBackBufferWidth = width * cellwidth;
-            _graphics.ApplyChanges();
-
+            width = (int)Math.Floor(Convert.ToDouble(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / cellwidth)) - 10;
+            height = (int)Math.Floor(Convert.ToDouble(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / cellwidth))- 6;
+            grid = new bool[height, width];
+            adjacent = new int[height, width];
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -46,7 +46,9 @@ namespace gameoflife
                     }
                 }
             }
-
+            _graphics.PreferredBackBufferHeight = height * 16;
+            _graphics.PreferredBackBufferWidth = width * 16;
+            _graphics.ApplyChanges();
             base.Initialize();
         }
 

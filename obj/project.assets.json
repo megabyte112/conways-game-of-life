@@ -174,24 +174,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Aidan\\.nuget\\packages\\": {}
+    "C:\\Users\\aidan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aidan\\Documents\\code\\VS\\C#\\not-college\\gameoflife\\gameoflife.csproj",
+      "projectUniqueName": "C:\\Users\\aidan\\Documents\\GitHub\\conways-game-of-life\\gameoflife.csproj",
       "projectName": "gameoflife",
-      "projectPath": "C:\\Users\\Aidan\\Documents\\code\\VS\\C#\\not-college\\gameoflife\\gameoflife.csproj",
-      "packagesPath": "C:\\Users\\Aidan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aidan\\Documents\\code\\VS\\C#\\not-college\\gameoflife\\obj\\",
+      "projectPath": "C:\\Users\\aidan\\Documents\\GitHub\\conways-game-of-life\\gameoflife.csproj",
+      "packagesPath": "C:\\Users\\aidan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\aidan\\Documents\\GitHub\\conways-game-of-life\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Aidan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\aidan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -236,7 +238,7 @@
           },
           {
             "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[3.1.22, 3.1.22]"
+            "version": "[3.1.21, 3.1.21]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
@@ -252,7 +254,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
