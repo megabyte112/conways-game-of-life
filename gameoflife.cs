@@ -136,6 +136,7 @@ namespace gameoflife
             }
             else if (keyboard.IsKeyDown(Keys.Space) && !lastkeyboardupdate.IsKeyDown(Keys.Space))
             {
+                // toggle pause
                 if (advance)
                 {
                     advance = false;
@@ -149,6 +150,7 @@ namespace gameoflife
             }
             else if (keyboard.IsKeyDown(Keys.Back))
             {
+                // clear the grid
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
@@ -164,8 +166,11 @@ namespace gameoflife
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
+            // text
             _spriteBatch.DrawString(font, (" Live: "+GetAlive(grid)+"    Dead: " + GetDead(grid)
             + "    Status: "+ status), Vector2.Zero, Color.White);
+
+            // draw grid
             for (int y = 2; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -176,6 +181,7 @@ namespace gameoflife
                     }
                 }
             }
+            
             _spriteBatch.End();
             base.Draw(gameTime);
         }
