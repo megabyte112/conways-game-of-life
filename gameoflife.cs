@@ -88,7 +88,7 @@ namespace gameoflife
                 }
                 timesrestarted = 0;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (keyboard.IsKeyDown(Keys.Escape))
                 Exit();
             else if (lastmousestate.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed)
             {
@@ -103,7 +103,7 @@ namespace gameoflife
                     grid[celly, cellx] = false;
                 }
             }
-            else if (Keyboard.GetState().IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter) && timesrestarted == 0)
+            else if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter) && timesrestarted == 0)
             {
                 timesrestarted++;
                 for (int y = 0; y < height; y++)
@@ -114,10 +114,14 @@ namespace gameoflife
                         {
                             grid[y,x] = true;
                         }
+                        else
+                        {
+                            grid[y, x] = false;
+                        }
                     }
                 }
             }
-            else if(Keyboard.GetState().IsKeyDown(Keys.Space) && !lastkeyboardupdate.IsKeyDown(Keys.Space))
+            else if (keyboard.IsKeyDown(Keys.Space) && !lastkeyboardupdate.IsKeyDown(Keys.Space))
             {
                 if (advance)
                 {
@@ -128,6 +132,16 @@ namespace gameoflife
                     advance = true;
                 }
             }
+            else if (keyboard.IsKeyDown(Keys.Back))
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        grid[y, x] = false;
+                    }
+                }
+            }
             base.Update(gameTime);
         }
 
@@ -135,8 +149,7 @@ namespace gameoflife
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(font, (" Time: " + (gameTime.TotalGameTime).ToString().Substring(0, 8) + 
-            "    Alive: "+GetAlive(grid)+"    Dead: " + GetDead(grid)), Vector2.Zero, Color.White);
+            _spriteBatch.DrawString(font, (" Alive: "+GetAlive(grid)+"    Dead: " + GetDead(grid)), Vector2.Zero, Color.White);
             for (int y = 2; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
