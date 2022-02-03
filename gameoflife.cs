@@ -25,17 +25,23 @@ namespace gameoflife
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            
+            // limit framerate to 15fps
             this.IsFixedTimeStep = true;
             this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 15d);
+
             IsMouseVisible = true;
         }
 
         protected override void Initialize()
         {
+            // how many squares should be used depending on screen resolution
             width = (int)Math.Floor(Convert.ToDouble(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / cellwidth)) - 10;
             height = (int)Math.Floor(Convert.ToDouble(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height / cellwidth))- 6;
             grid = new bool[height, width];
             adjacent = new int[height, width];
+
+            // randomise grid
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -46,6 +52,8 @@ namespace gameoflife
                     }
                 }
             }
+
+            // set window size
             _graphics.PreferredBackBufferHeight = height * 16;
             _graphics.PreferredBackBufferWidth = width * 16;
             _graphics.ApplyChanges();
@@ -55,6 +63,8 @@ namespace gameoflife
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // load font and square texture
             font = this.Content.Load<SpriteFont>("font");
             square = this.Content.Load<Texture2D>("square");
         }
@@ -66,12 +76,13 @@ namespace gameoflife
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
             adjacent = GetAdjacent(grid);
-            if (advance)
+            if (advance)    // only run when not paused
             {
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
+                        // conway's rules
                         if (grid[y, x] && adjacent[y,x] < 2)
                         {
                             grid[y, x] = false;
@@ -91,8 +102,11 @@ namespace gameoflife
                 Exit();
             else if (lastmousestate.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed)
             {
+                // mouseposition divided by cell width gives you the coordinate of the cell
                 int cellx = (int)Math.Floor(Convert.ToDouble(mouse.X / cellwidth));
                 int celly = (int)Math.Floor(Convert.ToDouble(mouse.Y / cellwidth));
+
+                // toggle state of cell
                 if (grid[celly, cellx] == false)
                 {
                     grid[celly, cellx] = true;
@@ -114,6 +128,7 @@ namespace gameoflife
                         }
                         else
                         {
+                            // old white spaces need to be overwritten
                             grid[y, x] = false;
                         }
                     }
