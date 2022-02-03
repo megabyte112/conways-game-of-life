@@ -152,9 +152,17 @@ namespace gameoflife
                 {
                     cellx = width - 1;
                 }
+                else if (cellx < 0)
+                {
+                    cellx = 0;
+                }
                 if (celly >= height)
                 {
-                    celly = 0;
+                    celly = height - 1;
+                }
+                else if (celly < 2)
+                {
+                    celly = 2;
                 }
                 grid[celly, cellx] = type;
             }
@@ -358,7 +366,7 @@ namespace gameoflife
             }
             else if (keyboard.IsKeyDown(Keys.G) && !lastkeyboardupdate.IsKeyDown(Keys.G))
             {
-                if (File.Exists("gosper"))
+                if (File.Exists("Content/gosper"))
                 {
                     grid = Gosper(grid);
                 }
@@ -492,7 +500,7 @@ namespace gameoflife
                     grid[y, x] = false;
                 }
             }
-            string loadname = "gosper";
+            string loadname = "Content/gosper";
             var stream = File.Open(loadname, FileMode.Open);
             var br = new BinaryReader(stream);
             for (int y = 0; y < 18; y++)

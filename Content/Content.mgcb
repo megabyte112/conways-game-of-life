@@ -20,6 +20,9 @@
 /processorParam:TextureFormat=Compressed
 /build:font.spritefont
 
+#begin gosper
+/copy:gosper
+
 #begin square.png
 /importer:TextureImporter
 /processor:TextureProcessor
