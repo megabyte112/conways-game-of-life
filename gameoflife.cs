@@ -20,7 +20,7 @@ namespace gameoflife
         MouseState mouse = Mouse.GetState();
         KeyboardState keyboard = Keyboard.GetState();
         bool advance = true;
-        int timesrestarted = 0;
+        string status = "Running  (Esc = Exit, Enter = Random, Backspace = Clear, Space = Pause)";
         public gameoflife()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -86,7 +86,6 @@ namespace gameoflife
                         }
                     }
                 }
-                timesrestarted = 0;
             }
             if (keyboard.IsKeyDown(Keys.Escape))
                 Exit();
@@ -103,9 +102,8 @@ namespace gameoflife
                     grid[celly, cellx] = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter) && timesrestarted == 0)
+            else if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter))
             {
-                timesrestarted++;
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
@@ -126,10 +124,12 @@ namespace gameoflife
                 if (advance)
                 {
                     advance = false;
+                    status = "Paused";
                 }
                 else
                 {
                     advance = true;
+                    status = "Running";
                 }
             }
             else if (keyboard.IsKeyDown(Keys.Back))
@@ -149,7 +149,8 @@ namespace gameoflife
         {
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin();
-            _spriteBatch.DrawString(font, (" Alive: "+GetAlive(grid)+"    Dead: " + GetDead(grid)), Vector2.Zero, Color.White);
+            _spriteBatch.DrawString(font, (" Live: "+GetAlive(grid)+"    Dead: " + GetDead(grid)
+            + "    Status: "+ status), Vector2.Zero, Color.White);
             for (int y = 2; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
