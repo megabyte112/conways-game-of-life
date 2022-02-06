@@ -8,6 +8,7 @@ namespace gameoflife
 {
     public class gameoflife : Game
     {
+        static Camera camera;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         Texture2D square;
@@ -24,14 +25,12 @@ namespace gameoflife
         string status = "Waiting (Press Space to Start)";
         string savestatus;
         bool showcontrols = true;
-        int[] possibleframerates = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60 };
-        int currentframerateindex = 11;
         bool type;
         double framerate;
         int cellx;
         int celly;
-        int windowheight;
-        int windowwidth;
+        Vector2 mousepos;
+        Vector2 mouseworldpos;
         Vector2 offset;
         static float camerazoomspeed;
         int count;
@@ -40,6 +39,9 @@ namespace gameoflife
         int deltaxpos;
         int deltaypos;
         Vector2 moved;
+        Vector2 lastmoved;
+        Vector2 deltamoved;
+        bool cameracanmove;
         string controlsmessage = @"
             Controls:
                 Space                     Pause/Play
@@ -85,11 +87,14 @@ namespace gameoflife
                 }
             }
             _graphics.HardwareModeSwitch = false;
-            Window.AllowUserResizing = true;
-            _graphics.PreferredBackBufferHeight = 720;
-            _graphics.PreferredBackBufferWidth = 1280;
+            Window.AllowUserResizing = false;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            _graphics.ToggleFullScreen();
             _graphics.ApplyChanges();
+            camera = new Camera(_graphics.GraphicsDevice.Viewport);
             count = 1;
+            cameracanmove = false;
             base.Initialize();
         }
 
@@ -106,12 +111,15 @@ namespace gameoflife
         {
             var lastmousestate = mouse;
             var lastkeyboardupdate = keyboard;
+            mouseworldpos = Vector2.Transform(new Vector2(mouse.X, mouse.Y), Matrix.Invert(camera.Transform))/cellwidth;
+            cellx = (int)mouseworldpos.X;
+            celly = (int)mouseworldpos.Y;
             mouse = Mouse.GetState();
             keyboard = Keyboard.GetState();
             adjacent = GetAdjacent(grid);
-            // mouseposition divided by cell width gives you the coordinate of the cell, compensate for zoom
-            celly = (int)Math.Floor(Convert.ToDouble(mouse.Y - offset.Y)/ cellwidth);
-            cellx = (int)Math.Floor(Convert.ToDouble(mouse.X - offset.X)/ cellwidth);
+            camera.MoveVector(-deltamoved * (1/camera.Zoom));
+            camera.Update();
+
             if (advance && count == 1)    // only run when not paused and once every 4 frames
             {
                 adjacent = GetAdjacent(grid);
@@ -175,16 +183,46 @@ namespace gameoflife
                 }
                 grid[celly, cellx] = type;
             }
-            if (mouse.RightButton == ButtonState.Pressed && lastmousestate.RightButton != ButtonState.Pressed)
+            if (mouse.RightButton == ButtonState.Pressed && lastmousestate.RightButton != ButtonState.Pressed && cameracanmove)
             {
                 startxpos = mouse.X;
                 startypos = mouse.Y;
             }
-            else if (mouse.RightButton == ButtonState.Pressed)
+            else if (mouse.RightButton == ButtonState.Pressed && cameracanmove)
             {
                 deltaxpos = mouse.X - lastmousestate.X;
                 deltaypos = mouse.Y - lastmousestate.Y;
+                lastmoved = moved;
                 moved = moved + new Vector2(deltaxpos, deltaypos);
+                deltamoved = moved - lastmoved;
+            }
+            else if (deltamoved.X > 1 || deltamoved.X < -1 || deltamoved.Y > 1 || deltamoved.Y < -1)
+            {
+                deltamoved/=1.1f;
+            }
+            else
+            {
+                deltamoved=Vector2.Zero;
+            }
+            if (camera.X - 6848 > -200)
+            {
+                deltamoved += new Vector2(10, 0);
+            }
+            else if (camera.X < 200)
+            {
+                deltamoved += new Vector2(-10, 0);
+            }
+            else if (camera.Y - 3872 > -200)
+            {
+                deltamoved += new Vector2(0, 10);
+            }
+            else if (camera.Y < 200)
+            {
+                deltamoved += new Vector2(0, -10);
+            }
+            else if (!showcontrols)
+            {
+                cameracanmove = true;
             }
             if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter))
             {
@@ -212,12 +250,10 @@ namespace gameoflife
                 {
                     advance = false;
                     status = "Paused";
-                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
                 }
                 else
                 {
                     advance = true;
-                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / Convert.ToDouble(possibleframerates[currentframerateindex]));
                 }
                 savestatus = "";
                 showcontrols = false;
@@ -389,65 +425,56 @@ namespace gameoflife
                 if (File.Exists("Content/gosper"))
                 {
                     grid = Gosper(grid);
-                    cellwidth = 4;
+                    camera.X = 1000;
+                    camera.Y = 600;
+                    camera.Zoom = 0.8f;
                 }
                 else
                 {
                     savestatus = "Missing Gosper Save File!";
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.Right) && !lastkeyboardupdate.IsKeyDown(Keys.Right) && currentframerateindex < 11)
-            {
-                this.TargetElapsedTime = TimeSpan.FromSeconds(1d / Convert.ToDouble(possibleframerates[++currentframerateindex]));
-            }
-            else if (keyboard.IsKeyDown(Keys.Left) && !lastkeyboardupdate.IsKeyDown(Keys.Left) && currentframerateindex > 0)
-            {
-                this.TargetElapsedTime = TimeSpan.FromSeconds(1d / Convert.ToDouble(possibleframerates[--currentframerateindex]));
-            }
             else if (keyboard.IsKeyDown(Keys.F11) && !lastkeyboardupdate.IsKeyDown(Keys.F11))
             {
                 if (_graphics.IsFullScreen)
                 {
-                    _graphics.PreferredBackBufferHeight = windowheight;
-                    _graphics.PreferredBackBufferWidth = windowwidth;
+                    _graphics.PreferredBackBufferHeight = 720;
+                    _graphics.PreferredBackBufferWidth = 1280;
                 }
                 else
                 {
-                    windowheight = Window.ClientBounds.Height;
-                    windowwidth = Window.ClientBounds.Width;
                     _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
                     _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 }
                 _graphics.ToggleFullScreen();
                 _graphics.ApplyChanges();
+                camera = new Camera(_graphics.GraphicsDevice.Viewport);
             }
             if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4)
             {
-                camerazoomspeed = -20;
+                camerazoomspeed = 15f;
             }
             else if (mouse.ScrollWheelValue < lastmousestate.ScrollWheelValue && cellwidth < 32)
             {
-                camerazoomspeed = 20;
+                camerazoomspeed = -15f;
             }
             if (camerazoomspeed > 0)
             {
-                cellwidth=(camerazoomspeed/32)+cellwidth;
+                camera.Zoom+=0.002f * camerazoomspeed;
                 camerazoomspeed -= 1f;
-                if (cellwidth>32)
-                {
-                    camerazoomspeed = 0;
-                    cellwidth = 32;
-                }
             }
             else if (camerazoomspeed < 0)
             {
-                cellwidth=(camerazoomspeed/32)+cellwidth;
+                camera.Zoom+=0.002f * camerazoomspeed;
                 camerazoomspeed += 1f;
-                if (cellwidth<4) 
-                {
-                    camerazoomspeed = 0;
-                    cellwidth = 4;
-                }
+            }
+            if (camera.Zoom < 0.2f)
+            {
+                camerazoomspeed+=2f;
+            }
+            else if (camera.Zoom > 1.5f)
+            {
+                camerazoomspeed-=2f;
             }
             if (count != 4)
             {
@@ -457,7 +484,7 @@ namespace gameoflife
             {
                 count = 1;
             }
-            offset = new Vector2(-(width*cellwidth/2)+Window.ClientBounds.Width/2, -(height*cellwidth/2)+Window.ClientBounds.Height/2) + moved;
+            offset = offset + deltamoved;
             base.Update(gameTime);
         }
 
@@ -465,12 +492,11 @@ namespace gameoflife
         {
             Window.Title = ("Conway's Game of Life      Live: "+GetAlive(grid, showcontrols)+"    Dead: " + GetDead(grid, showcontrols)
             + "    Status: "+ status + "    FPS: "+framerate+"    "+savestatus);
-            float scale = cellwidth / 16;
             GraphicsDevice.Clear(Color.Black);
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.Transform);
             if (showcontrols)
             {
-                _spriteBatch.DrawString(font, (controlsmessage), new Vector2(32, 32), Color.White );
+                _spriteBatch.DrawString(font, (controlsmessage), new Vector2(0, 0), Color.White );
             }
             else
             {    // draw grid
@@ -482,17 +508,17 @@ namespace gameoflife
                     {
                         if (grid[y,x] == true)
                         {
-                            _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth) + offset, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                            _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth), null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                         }
                         if (y == celly && x == cellx && !advance)
                         {
                             if (grid[y, x])
                             {
-                                _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth) + offset, null, Color.DarkGray, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                                _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth), null, Color.DarkGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                             }
                             else
                             {
-                                _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth) + offset, null, Color.Gray, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                                _spriteBatch.Draw(square, new Vector2 (x * cellwidth, y * cellwidth), null, Color.Gray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                             }
                         }
                     }
