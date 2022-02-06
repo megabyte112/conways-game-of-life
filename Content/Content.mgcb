@@ -23,6 +23,13 @@
 #begin gosper
 /copy:gosper
 
+#begin info.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:info.spritefont
+
 #begin square.png
 /importer:TextureImporter
 /processor:TextureProcessor

@@ -13,6 +13,7 @@ namespace gameoflife
         private SpriteBatch _spriteBatch;
         Texture2D square;
         SpriteFont font;
+        SpriteFont infofont;
         Random r = new Random();
         const int height = 242;
         const int width = 428;
@@ -21,8 +22,8 @@ namespace gameoflife
         int[,] adjacent;
         MouseState mouse = Mouse.GetState();
         KeyboardState keyboard = Keyboard.GetState();
-        bool advance = false;
-        string status = "Waiting (Press Space to Start)";
+        static bool advance = false;
+        string status = "Waiting";
         string savestatus;
         bool showcontrols = true;
         bool type;
@@ -42,6 +43,7 @@ namespace gameoflife
         Vector2 deltamoved;
         bool cameracanmove;
         bool islowframerate;
+        DiscordRPC.DiscordRpcClient client;
         string controlsmessage = @"
             Controls:
                 Space - Pause/Play
@@ -57,12 +59,14 @@ namespace gameoflife
                 Right Click + drag - Pan Camera
                 F11 - Toggle Fullscreen/Windowed mode
                 Delete - Low Framerate Mode (Fix Performance Issues)
+                C - Show This Menu
                     
                         Press Space to begin";
         public gameoflife()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            _graphics.HardwareModeSwitch = false;
             
             // limit framerate to 15fps
             this.IsFixedTimeStep = true;
@@ -75,24 +79,19 @@ namespace gameoflife
         {
             grid = new bool[height, width];
             adjacent = new int[height, width];
-            savestatus = "";
+            savestatus = "Press Enter to randomise";
 
-            // randomise grid
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    if (r.Next(0,2) == 1)
-                    {
-                        grid[y,x] = true;
-                    }
-                }
-            }
-            _graphics.HardwareModeSwitch = false;
-            Window.AllowUserResizing = false;
-            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.ToggleFullScreen();
+            // discord
+            client = new DiscordRPC.DiscordRpcClient("939845054497955871");
+            client.Initialize();
+            UpdateDiscord(status);
+
+
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += OnResize;
+            Window.Title = "Conway's Game of Life";
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = 1280;
             _graphics.ApplyChanges();
             camera = new Camera(_graphics.GraphicsDevice.Viewport);
             count = 1;
@@ -107,6 +106,7 @@ namespace gameoflife
 
             // load font and square texture
             font = this.Content.Load<SpriteFont>("font");
+            infofont = this.Content.Load<SpriteFont>("info");
             square = this.Content.Load<Texture2D>("square");
         }
 
@@ -122,7 +122,7 @@ namespace gameoflife
             adjacent = GetAdjacent(grid);
             camera.MoveVector(-deltamoved * (1/camera.Zoom));
             camera.Update();
-
+            
             if (advance && count == 4)    // only run when not paused and once every 4 frames
             {
                 adjacent = GetAdjacent(grid);
@@ -149,7 +149,7 @@ namespace gameoflife
             }
             if (keyboard.IsKeyDown(Keys.Escape))
                 Exit();
-            if (lastmousestate.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed)
+            if (lastmousestate.LeftButton == ButtonState.Released && mouse.LeftButton == ButtonState.Pressed && !showcontrols)
             {
                 if (cellx < width && celly < height && cellx > 0 && celly > 0)
                 {
@@ -166,19 +166,19 @@ namespace gameoflife
                 }
                 savestatus = "";
             }
-            else if (mouse.LeftButton == ButtonState.Pressed && !advance)
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols)
             {
-                if (cellx >= width)
+                if (cellx >= width-1)
                 {
-                    cellx = width - 1;
+                    cellx = width - 2;
                 }
                 else if (cellx < 0)
                 {
                     cellx = 1;
                 }
-                if (celly >= height)
+                if (celly >= height-1)
                 {
-                    celly = height - 1;
+                    celly = height - 2;
                 }
                 else if (celly < 0)
                 {
@@ -207,19 +207,19 @@ namespace gameoflife
             {
                 deltamoved=Vector2.Zero;
             }
-            if (camera.X - 6848 > 0)
+            if (camera.X - 6848 > 0 && mouse.RightButton == ButtonState.Released)
             {
                 deltamoved += new Vector2(10, 0);
             }
-            else if (camera.X < 0)
+            else if (camera.X < 0 && mouse.RightButton == ButtonState.Released)
             {
                 deltamoved += new Vector2(-10, 0);
             }
-            if (camera.Y - 3872 > 0)
+            if (camera.Y - 3872 > 0 && mouse.RightButton == ButtonState.Released)
             {
                 deltamoved += new Vector2(0, 10);
             }
-            else if (camera.Y < 0)
+            else if (camera.Y < 0 && mouse.RightButton == ButtonState.Released)
             {
                 deltamoved += new Vector2(0, -10);
             }
@@ -244,12 +244,30 @@ namespace gameoflife
                         }
                     }
                 }
-                savestatus = "";
+                if (savestatus == "Press Enter to randomise")
+                {
+                    savestatus = "Press Space to Start";
+                }
+                else
+                {
+                    savestatus = "";
+                }
             }
             else if (keyboard.IsKeyDown(Keys.Space) && !lastkeyboardupdate.IsKeyDown(Keys.Space))
             {
                 // toggle pause
-                if (advance)
+                
+                if (!showcontrols)
+                {
+                    savestatus = "";
+                }
+                if (showcontrols)
+                {
+                    camera.Zoom = 0.18f;
+                    showcontrols = false;
+                    status = "Paused";
+                }
+                else if (advance)
                 {
                     advance = false;
                     status = "Paused";
@@ -257,11 +275,11 @@ namespace gameoflife
                 else
                 {
                     advance = true;
+                    status = "Running";
                 }
-                savestatus = "";
-                showcontrols = false;
+                UpdateDiscord(status);
             }
-            else if (keyboard.IsKeyDown(Keys.Back))
+            else if (keyboard.IsKeyDown(Keys.Back) && !showcontrols)
             {
                 // clear the grid
                 for (int y = 0; y < height; y++)
@@ -278,6 +296,10 @@ namespace gameoflife
                 // save to slot 1
                 Save(grid, "1");
                 savestatus = "Saved to slot 1";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1))
             {
@@ -286,6 +308,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "1");
                     savestatus = "Loaded from slot 1";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2))
@@ -293,6 +319,10 @@ namespace gameoflife
                 // save to slot 2
                 Save(grid, "2");
                 savestatus = "Saved to slot 2";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2))
             {
@@ -301,6 +331,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "2");
                     savestatus = "Loaded from slot 2";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3))
@@ -308,6 +342,10 @@ namespace gameoflife
                 // save to slot 3
                 Save(grid, "3");
                 savestatus = "Saved to slot 3";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3))
             {
@@ -316,6 +354,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "3");
                     savestatus = "Loaded from slot 3";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4))
@@ -323,6 +365,10 @@ namespace gameoflife
                 // save to slot 4
                 Save(grid, "4");
                 savestatus = "Saved to slot 4";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4))
             {
@@ -331,6 +377,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "4");
                     savestatus = "Loaded from slot 4";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5))
@@ -338,6 +388,10 @@ namespace gameoflife
                 // save to slot 5
                 Save(grid, "5");
                 savestatus = "Saved to slot 5";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5))
             {
@@ -346,6 +400,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "5");
                     savestatus = "Loaded from slot 5";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6))
@@ -353,6 +411,10 @@ namespace gameoflife
                 // save to slot 6
                 Save(grid, "6");
                 savestatus = "Saved to slot 6";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6))
             {
@@ -361,6 +423,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "6");
                     savestatus = "Loaded from slot 6";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7))
@@ -368,6 +434,10 @@ namespace gameoflife
                 // save to slot 7
                 Save(grid, "7");
                 savestatus = "Saved to slot 7";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7))
             {
@@ -376,6 +446,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "7");
                     savestatus = "Loaded from slot 7";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8))
@@ -383,6 +457,10 @@ namespace gameoflife
                 // save to slot 8
                 Save(grid, "8");
                 savestatus = "Saved to slot 8";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8))
             {
@@ -391,6 +469,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "8");
                     savestatus = "Loaded from slot 8";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9))
@@ -398,6 +480,10 @@ namespace gameoflife
                 // save to slot 9
                 Save(grid, "9");
                 savestatus = "Saved to slot 9";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9))
             {
@@ -406,6 +492,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "9");
                     savestatus = "Loaded from slot 9";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0))
@@ -413,6 +503,11 @@ namespace gameoflife
                 // save to slot 0
                 Save(grid, "0");
                 savestatus = "Saved to slot 0";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+                
             }
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0))
             {
@@ -421,6 +516,10 @@ namespace gameoflife
                 {
                     grid = Load(grid, "0");
                     savestatus = "Loaded from slot 0";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.G) && !lastkeyboardupdate.IsKeyDown(Keys.G))
@@ -432,26 +531,15 @@ namespace gameoflife
                     camera.Y = 600;
                     camera.Zoom = 0.8f;
                 }
-                else
-                {
-                    savestatus = "Missing Gosper Save File!";
-                }
             }
             else if (keyboard.IsKeyDown(Keys.F11) && !lastkeyboardupdate.IsKeyDown(Keys.F11))
             {
-                if (_graphics.IsFullScreen)
-                {
-                    _graphics.PreferredBackBufferHeight = 720;
-                    _graphics.PreferredBackBufferWidth = 1280;
-                }
-                else
-                {
-                    _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-                    _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-                }
                 _graphics.ToggleFullScreen();
-                _graphics.ApplyChanges();
                 camera = new Camera(_graphics.GraphicsDevice.Viewport);
+                if (!showcontrols)
+                {
+                    camera.Zoom = 0.2f;
+                }
             }
             else if (keyboard.IsKeyDown(Keys.Delete) && !lastkeyboardupdate.IsKeyDown(Keys.Delete))
             {
@@ -465,13 +553,23 @@ namespace gameoflife
                     this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d);
                 }
             }
+            else if (keyboard.IsKeyDown(Keys.C) && !lastkeyboardupdate.IsKeyDown(Keys.C))
+            {
+                showcontrols = true;
+                camera.X = 3424;
+                camera.Y = 1936;
+                camera.Zoom = 1.5f;
+                advance = false;
+                status = "Waiting";
+                UpdateDiscord(status);
+            }
             if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4 && !showcontrols)
             {
-                camerazoomspeed = 15f;
+                camerazoomspeed = 10f;
             }
             else if (mouse.ScrollWheelValue < lastmousestate.ScrollWheelValue && cellwidth < 32 && !showcontrols)
             {
-                camerazoomspeed = -15f;
+                camerazoomspeed = -10f;
             }
             if (camerazoomspeed > 0)
             {
@@ -483,13 +581,17 @@ namespace gameoflife
                 camera.Zoom+=0.002f * camerazoomspeed;
                 camerazoomspeed += 1f;
             }
-            if (camera.Zoom < 0.2f)
+            if (camera.Zoom < 0.18f)
             {
                 camerazoomspeed+=2f;
             }
             else if (camera.Zoom > 1.5f)
             {
                 camerazoomspeed-=2f;
+            }
+            if (camerazoomspeed < 1 && camerazoomspeed > -1)
+            {
+                camerazoomspeed = 0;
             }
             if (count != 4)
             {
@@ -512,8 +614,7 @@ namespace gameoflife
 
         protected override void Draw(GameTime gameTime)
         {
-            Window.Title = ("Conway's Game of Life      Live: "+GetAlive(grid, showcontrols)+"    Dead: " + GetDead(grid, showcontrols)
-            + "    Status: "+ status + "    FPS: "+framerate+"    "+savestatus);
+            string info = "Status: "+status+"    Live: "+GetAlive(grid)+"    Dead: "+GetDead(grid);
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.Transform);
             if (showcontrols)
@@ -524,6 +625,8 @@ namespace gameoflife
             {    // draw grid
                 int y;
                 int x;
+                _spriteBatch.DrawString(infofont, info, new Vector2(30, -300), Color.White);
+                _spriteBatch.DrawString(infofont, savestatus, new Vector2(30, 3900), Color.White);
                 for (y = 1; y < height-1; y++)
                 {
                     for (x = 1; x < width-1; x++)
@@ -545,15 +648,15 @@ namespace gameoflife
                         }
                     }
                 }
-                for (int i = 1; i < width; i++)
+                for (int i = 0; i < width-1; i++)
                 {
                     _spriteBatch.Draw(square, new Vector2 (i * cellwidth, 0), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    _spriteBatch.Draw(square, new Vector2 (i * cellwidth, height*cellwidth - 1), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    _spriteBatch.Draw(square, new Vector2 (i * cellwidth, (height-1)*cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 }
-                for (int j = 0; j <= height; j++)
+                for (int j = 0; j < height; j++)
                 {
                     _spriteBatch.Draw(square, new Vector2 (0, j * cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
-                    _spriteBatch.Draw(square, new Vector2 (width*cellwidth -1, j*cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    _spriteBatch.Draw(square, new Vector2 ((width-1)*cellwidth, j*cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 }
 
             }
@@ -561,7 +664,7 @@ namespace gameoflife
             framerate = Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds);
             base.Draw(gameTime);
         }
-        static int GetAlive(bool[,] grid, bool showcontrols)
+        static int GetAlive(bool[,] grid)
         {
             int alive = 0;
             foreach (var x in grid)
@@ -571,10 +674,9 @@ namespace gameoflife
                     alive++;
                 }
             }
-            if (showcontrols) return 0;
             return alive;
         }
-        static int GetDead(bool[,] grid, bool showcontrols)
+        static int GetDead(bool[,] grid)
         {
             int dead = 0;
             foreach (var x in grid)
@@ -584,7 +686,6 @@ namespace gameoflife
                     dead++;
                 }
             }
-            if (showcontrols) return 0;
             return dead;
         }
         static int[,] GetAdjacent(bool[,] grid)
@@ -658,10 +759,31 @@ namespace gameoflife
                     grid[y, x] = br.ReadBoolean();
                 }
             }
+            advance = true;
             br.Close();
             stream.Close();
             return grid;
         }
-
+        void UpdateDiscord(string status)
+        {
+            client.SetPresence(new DiscordRPC.RichPresence()
+            {
+                Details = "Status: "+status,
+                Assets = new DiscordRPC.Assets()
+                {
+                    LargeImageKey = "icon",
+                    LargeImageText = "Conway's Game of Life"
+                }
+            });
+        }
+        void OnResize(Object sender, EventArgs e)
+        {
+            camera = new Camera(_graphics.GraphicsDevice.Viewport);
+            camera.Zoom = 0.18f;
+            if (showcontrols)
+            {
+                camera.Zoom = 1.5f;
+            }
+        }
     }
 }

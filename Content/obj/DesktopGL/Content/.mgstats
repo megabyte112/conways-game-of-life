@@ -1,3 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont","C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/font.xnb","FontDescriptionProcessor","SpriteFontContent",2005,37922,0.2688606
-"C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png","C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/square.xnb","TextureProcessor","Texture2DContent",492,1109,0.0106393
+"C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont","C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/font.xnb","FontDescriptionProcessor","SpriteFontContent",2005,37922,0.3826282
+"C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/info.spritefont","C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/info.xnb","FontDescriptionProcessor","SpriteFontContent",2006,2102306,0.4854251
+"C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png","C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/square.xnb","TextureProcessor","Texture2DContent",492,1109,0.0127402
