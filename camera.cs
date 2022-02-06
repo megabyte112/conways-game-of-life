@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 class Camera
 {
     private Matrix transform;
-    private Vector2 centre = Vector2.Zero;
+    private Vector2 centre = new Vector2(3424, 1936);
     private Viewport viewport;
     private float zoom = 1;
 

@@ -29,7 +29,6 @@ namespace gameoflife
         double framerate;
         int cellx;
         int celly;
-        Vector2 mousepos;
         Vector2 mouseworldpos;
         Vector2 offset;
         static float camerazoomspeed;
@@ -42,19 +41,22 @@ namespace gameoflife
         Vector2 lastmoved;
         Vector2 deltamoved;
         bool cameracanmove;
+        bool islowframerate;
         string controlsmessage = @"
             Controls:
-                Space                     Pause/Play
-                Backspace              Clear
-                Enter                       Random Generation
-                Ctrl + 0-9                 Save Current State
-                0-9                           Load Saved State
-                Esc                          Exit
-                G                             Generate a Gosper Glider Gun
-                Left/Right arrow       Control Framerate
-                Scroll Wheel            Zoom in/out
-
-                  Click on a cell to toggle its state
+                Space - Pause/Play
+                Backspace - Clear
+                Enter - Random Generation
+                Ctrl + 0-9 - Save Current State
+                0-9 - Load Saved State
+                Esc - Exit
+                G - Generate a Gosper Glider Gun
+                Scroll Wheel - Zoom in/out
+                Left Click - Toggle cell state
+                Left Click + drag (while paused) - Draw
+                Right Click + drag - Pan Camera
+                F11 - Toggle Fullscreen/Windowed mode
+                Delete - Low Framerate Mode (Fix Performance Issues)
                     
                         Press Space to begin";
         public gameoflife()
@@ -95,6 +97,7 @@ namespace gameoflife
             camera = new Camera(_graphics.GraphicsDevice.Viewport);
             count = 1;
             cameracanmove = false;
+            islowframerate = false;
             base.Initialize();
         }
 
@@ -120,7 +123,7 @@ namespace gameoflife
             camera.MoveVector(-deltamoved * (1/camera.Zoom));
             camera.Update();
 
-            if (advance && count == 1)    // only run when not paused and once every 4 frames
+            if (advance && count == 4)    // only run when not paused and once every 4 frames
             {
                 adjacent = GetAdjacent(grid);
                 status = "Running";
@@ -204,19 +207,19 @@ namespace gameoflife
             {
                 deltamoved=Vector2.Zero;
             }
-            if (camera.X - 6848 > -200)
+            if (camera.X - 6848 > 0)
             {
                 deltamoved += new Vector2(10, 0);
             }
-            else if (camera.X < 200)
+            else if (camera.X < 0)
             {
                 deltamoved += new Vector2(-10, 0);
             }
-            else if (camera.Y - 3872 > -200)
+            if (camera.Y - 3872 > 0)
             {
                 deltamoved += new Vector2(0, 10);
             }
-            else if (camera.Y < 200)
+            else if (camera.Y < 0)
             {
                 deltamoved += new Vector2(0, -10);
             }
@@ -450,11 +453,23 @@ namespace gameoflife
                 _graphics.ApplyChanges();
                 camera = new Camera(_graphics.GraphicsDevice.Viewport);
             }
-            if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4)
+            else if (keyboard.IsKeyDown(Keys.Delete) && !lastkeyboardupdate.IsKeyDown(Keys.Delete))
+            {
+                islowframerate = !islowframerate;
+                if (!islowframerate)
+                {
+                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+                }
+                else
+                {
+                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d);
+                }
+            }
+            if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4 && !showcontrols)
             {
                 camerazoomspeed = 15f;
             }
-            else if (mouse.ScrollWheelValue < lastmousestate.ScrollWheelValue && cellwidth < 32)
+            else if (mouse.ScrollWheelValue < lastmousestate.ScrollWheelValue && cellwidth < 32 && !showcontrols)
             {
                 camerazoomspeed = -15f;
             }
@@ -482,7 +497,14 @@ namespace gameoflife
             }
             else
             {
-                count = 1;
+                if (islowframerate)
+                {
+                    count = 3;
+                }
+                else
+                {
+                    count = 1;
+                }
             }
             offset = offset + deltamoved;
             base.Update(gameTime);
@@ -496,7 +518,7 @@ namespace gameoflife
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.Transform);
             if (showcontrols)
             {
-                _spriteBatch.DrawString(font, (controlsmessage), new Vector2(0, 0), Color.White );
+                _spriteBatch.DrawString(font, (controlsmessage), new Vector2(3100, 1660), Color.White );
             }
             else
             {    // draw grid
@@ -522,6 +544,16 @@ namespace gameoflife
                             }
                         }
                     }
+                }
+                for (int i = 1; i < width; i++)
+                {
+                    _spriteBatch.Draw(square, new Vector2 (i * cellwidth, 0), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    _spriteBatch.Draw(square, new Vector2 (i * cellwidth, height*cellwidth - 1), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                }
+                for (int j = 0; j <= height; j++)
+                {
+                    _spriteBatch.Draw(square, new Vector2 (0, j * cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    _spriteBatch.Draw(square, new Vector2 (width*cellwidth -1, j*cellwidth), null, Color.LightGray, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
                 }
 
             }
