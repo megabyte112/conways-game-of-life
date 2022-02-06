@@ -8,6 +8,7 @@ namespace gameoflife
 {
     public class gameoflife : Game
     {
+        static Gosper gosper = new Gosper();
         static Camera camera;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -86,6 +87,10 @@ namespace gameoflife
             client.Initialize();
             UpdateDiscord(status);
 
+            if (!Directory.Exists("saves"))
+            {
+                Directory.CreateDirectory("saves");
+            }
 
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += OnResize;
@@ -304,7 +309,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1))
             {
                 // Load from slot 1
-                if (File.Exists("1"))
+                if (File.Exists("saves/1"))
                 {
                     grid = Load(grid, "1");
                     savestatus = "Loaded from slot 1";
@@ -327,7 +332,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2))
             {
                 // Load from slot 2
-                if (File.Exists("2"))
+                if (File.Exists("saves/2"))
                 {
                     grid = Load(grid, "2");
                     savestatus = "Loaded from slot 2";
@@ -350,7 +355,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3))
             {
                 // Load from slot 3
-                if (File.Exists("3"))
+                if (File.Exists("saves/3"))
                 {
                     grid = Load(grid, "3");
                     savestatus = "Loaded from slot 3";
@@ -373,7 +378,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4))
             {
                 // Load from slot 4
-                if (File.Exists("4"))
+                if (File.Exists("saves/4"))
                 {
                     grid = Load(grid, "4");
                     savestatus = "Loaded from slot 4";
@@ -396,7 +401,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5))
             {
                 // Load from slot 5
-                if (File.Exists("5"))
+                if (File.Exists("saves/5"))
                 {
                     grid = Load(grid, "5");
                     savestatus = "Loaded from slot 5";
@@ -421,7 +426,7 @@ namespace gameoflife
                 // Load from slot 6
                 if (File.Exists("6"))
                 {
-                    grid = Load(grid, "6");
+                    grid = Load(grid, "saves/6");
                     savestatus = "Loaded from slot 6";
                     camera.Zoom = 0.2f;
                     camera.X = 3424;
@@ -442,7 +447,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7))
             {
                 // Load from slot 7
-                if (File.Exists("7"))
+                if (File.Exists("saves/7"))
                 {
                     grid = Load(grid, "7");
                     savestatus = "Loaded from slot 7";
@@ -465,7 +470,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8))
             {
                 // Load from slot 8
-                if (File.Exists("8"))
+                if (File.Exists("saves/8"))
                 {
                     grid = Load(grid, "8");
                     savestatus = "Loaded from slot 8";
@@ -488,7 +493,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9))
             {
                 // Load from slot 9
-                if (File.Exists("9"))
+                if (File.Exists("saves/9"))
                 {
                     grid = Load(grid, "9");
                     savestatus = "Loaded from slot 9";
@@ -512,7 +517,7 @@ namespace gameoflife
             else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0))
             {
                 // Load from slot 0
-                if (File.Exists("h"+height+"w"+width+"n0"))
+                if (File.Exists("saves/0"))
                 {
                     grid = Load(grid, "0");
                     savestatus = "Loaded from slot 0";
@@ -524,13 +529,10 @@ namespace gameoflife
             }
             else if (keyboard.IsKeyDown(Keys.G) && !lastkeyboardupdate.IsKeyDown(Keys.G))
             {
-                if (File.Exists("Content/gosper"))
-                {
-                    grid = Gosper(grid);
-                    camera.X = 1000;
-                    camera.Y = 600;
-                    camera.Zoom = 0.8f;
-                }
+                grid = Gosper(grid);
+                camera.X = 1000;
+                camera.Y = 600;
+                camera.Zoom = 0.8f;
             }
             else if (keyboard.IsKeyDown(Keys.F11) && !lastkeyboardupdate.IsKeyDown(Keys.F11))
             {
@@ -674,17 +676,25 @@ namespace gameoflife
                     alive++;
                 }
             }
+            if (alive > 102240)
+            {
+                alive = 102240;
+            }
             return alive;
         }
         static int GetDead(bool[,] grid)
         {
-            int dead = 0;
+            int dead = -1336;
             foreach (var x in grid)
             {
                 if (!x)
                 {
                     dead++;
                 }
+            }
+            if (dead < 0)
+            {
+                dead = 0;
             }
             return dead;
         }
@@ -714,7 +724,7 @@ namespace gameoflife
         }
         static void Save(bool[,] grid, string slot)
         {
-            string savename = slot;
+            string savename = "saves/"+slot;
             var stream = File.Open(savename, FileMode.Create);
             var bw = new BinaryWriter(stream);
             foreach (var x in grid)
@@ -726,7 +736,7 @@ namespace gameoflife
         }
         static bool[,] Load(bool[,] grid, string slot)
         {
-            string loadname = slot;
+            string loadname = "saves/"+slot;
             var stream = File.Open(loadname, FileMode.Open);
             var br = new BinaryReader(stream);
             for (int y = 0; y < height; y++)
@@ -749,19 +759,14 @@ namespace gameoflife
                     grid[y, x] = false;
                 }
             }
-            string loadname = "Content/gosper";
-            var stream = File.Open(loadname, FileMode.Open);
-            var br = new BinaryReader(stream);
             for (int y = 0; y < 18; y++)
             {
                 for (int x = 0; x < 40; x++)
                 {
-                    grid[y, x] = br.ReadBoolean();
+                    grid[y, x] = gosper.grid[y, x];
                 }
             }
             advance = true;
-            br.Close();
-            stream.Close();
             return grid;
         }
         void UpdateDiscord(string status)
