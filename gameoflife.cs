@@ -44,6 +44,8 @@ namespace gameoflife
         Vector2 deltamoved;
         bool cameracanmove;
         bool islowframerate;
+        const double defaultfps = 60d;
+        double targetfps;
         DiscordRPC.DiscordRpcClient client;
         string controlsmessage = @"
             Controls:
@@ -68,11 +70,8 @@ namespace gameoflife
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             _graphics.HardwareModeSwitch = false;
-            
-            // limit framerate to 15fps
             this.IsFixedTimeStep = true;
-            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
-
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1d / defaultfps);
             IsMouseVisible = true;
         }
 
@@ -102,6 +101,7 @@ namespace gameoflife
             count = 1;
             cameracanmove = false;
             islowframerate = false;
+            targetfps = defaultfps;
             base.Initialize();
         }
 
@@ -128,7 +128,7 @@ namespace gameoflife
             camera.MoveVector(-deltamoved * (1/camera.Zoom));
             camera.Update();
             
-            if (advance && count == 4)    // only run when not paused and once every 4 frames
+            if (advance && count == targetfps/15)    // only run 15 times a second
             {
                 adjacent = GetAdjacent(grid);
                 status = "Running";
@@ -171,13 +171,13 @@ namespace gameoflife
                 }
                 savestatus = "";
             }
-            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols)
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift))
             {
                 if (cellx >= width-1)
                 {
                     cellx = width - 2;
                 }
-                else if (cellx < 0)
+                else if (cellx < 1)
                 {
                     cellx = 1;
                 }
@@ -185,11 +185,37 @@ namespace gameoflife
                 {
                     celly = height - 2;
                 }
-                else if (celly < 0)
+                else if (celly < 1)
                 {
                     celly = 1;
                 }
                 grid[celly, cellx] = type;
+            }
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && keyboard.IsKeyDown(Keys.LeftShift))
+            {
+                if (cellx >= width-1)
+                {
+                    cellx = width - 2;
+                }
+                else if (cellx < 1)
+                {
+                    cellx = 1;
+                }
+                if (celly >= height-1)
+                {
+                    celly = height - 2;
+                }
+                else if (celly < 1)
+                {
+                    celly = 1;
+                }
+                for (int x = -1; x < 2; x++)
+                {
+                    for (int y = -1; y < 2; y++)
+                    {
+                        grid[celly + y, cellx + x] = type;
+                    }
+                }
             }
             if (mouse.RightButton == ButtonState.Pressed && lastmousestate.RightButton != ButtonState.Pressed && cameracanmove)
             {
@@ -527,12 +553,14 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.G) && !lastkeyboardupdate.IsKeyDown(Keys.G))
+            else if (keyboard.IsKeyDown(Keys.G) && !lastkeyboardupdate.IsKeyDown(Keys.G) && !showcontrols)
             {
                 grid = Gosper(grid);
-                camera.X = 1000;
-                camera.Y = 600;
-                camera.Zoom = 0.8f;
+                savestatus = "Loaded Gosper Gun";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = true;
             }
             else if (keyboard.IsKeyDown(Keys.F11) && !lastkeyboardupdate.IsKeyDown(Keys.F11))
             {
@@ -548,11 +576,13 @@ namespace gameoflife
                 islowframerate = !islowframerate;
                 if (!islowframerate)
                 {
-                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+                    this.TargetElapsedTime = TimeSpan.FromSeconds(1d / defaultfps);
+                    targetfps = defaultfps;
                 }
                 else
                 {
                     this.TargetElapsedTime = TimeSpan.FromSeconds(1d / 30d);
+                    targetfps = 30d;
                 }
             }
             else if (keyboard.IsKeyDown(Keys.C) && !lastkeyboardupdate.IsKeyDown(Keys.C))
@@ -563,6 +593,7 @@ namespace gameoflife
                 camera.Zoom = 1.5f;
                 advance = false;
                 status = "Waiting";
+                cameracanmove = false;
                 UpdateDiscord(status);
             }
             if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4 && !showcontrols)
@@ -595,20 +626,13 @@ namespace gameoflife
             {
                 camerazoomspeed = 0;
             }
-            if (count != 4)
+            if (count < targetfps/15)
             {
                 count++;
             }
             else
             {
-                if (islowframerate)
-                {
-                    count = 3;
-                }
-                else
-                {
-                    count = 1;
-                }
+                count = 1;
             }
             offset = offset + deltamoved;
             base.Update(gameTime);
@@ -616,7 +640,11 @@ namespace gameoflife
 
         protected override void Draw(GameTime gameTime)
         {
-            string info = "Status: "+status+"    Live: "+GetAlive(grid)+"    Dead: "+GetDead(grid);
+            // ==========================================================================
+            // fix this
+            // ==========================================================================
+            string info = "Status: "+status+"    Live: "+GetAlive(grid);
+
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, camera.Transform);
             if (showcontrols)
@@ -663,7 +691,10 @@ namespace gameoflife
 
             }
             _spriteBatch.End();
+
+            // fps count
             framerate = Math.Round(1 / gameTime.ElapsedGameTime.TotalSeconds);
+
             base.Draw(gameTime);
         }
         static int GetAlive(bool[,] grid)
@@ -681,22 +712,6 @@ namespace gameoflife
                 alive = 102240;
             }
             return alive;
-        }
-        static int GetDead(bool[,] grid)
-        {
-            int dead = -1336;
-            foreach (var x in grid)
-            {
-                if (!x)
-                {
-                    dead++;
-                }
-            }
-            if (dead < 0)
-            {
-                dead = 0;
-            }
-            return dead;
         }
         static int[,] GetAdjacent(bool[,] grid)
         {
