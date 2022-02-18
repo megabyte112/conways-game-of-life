@@ -274,224 +274,6 @@
           }
         }
       }
-    },
-    ".NETCoreApp,Version=v3.1/win-x64": {
-      "Autofac/5.2.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.1/Autofac.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.1/Autofac.dll": {}
-        }
-      },
-      "DiscordRichPresence/1.0.175": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Win32.Registry": "4.5.0",
-          "Newtonsoft.Json": "12.0.2"
-        },
-        "compile": {
-          "lib/netstandard2.0/DiscordRPC.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/DiscordRPC.dll": {}
-        }
-      },
-      "Microsoft.NETCore.Platforms/2.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard1.0/_._": {}
-        },
-        "runtime": {
-          "lib/netstandard1.0/_._": {}
-        }
-      },
-      "Microsoft.Win32.Registry/4.5.0": {
-        "type": "package",
-        "dependencies": {
-          "System.Security.AccessControl": "4.5.0",
-          "System.Security.Principal.Windows": "4.5.0"
-        },
-        "compile": {
-          "ref/netstandard2.0/Microsoft.Win32.Registry.dll": {}
-        },
-        "runtime": {
-          "runtimes/win/lib/netstandard2.0/Microsoft.Win32.Registry.dll": {}
-        }
-      },
-      "MonoGame.Content.Builder.Task/3.8.0.1641": {
-        "type": "package",
-        "build": {
-          "build/MonoGame.Content.Builder.Task.props": {},
-          "build/MonoGame.Content.Builder.Task.targets": {}
-        }
-      },
-      "MonoGame.Extended/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "12.0.3"
-        },
-        "compile": {
-          "lib/netstandard2.0/MonoGame.Extended.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MonoGame.Extended.dll": {}
-        },
-        "contentFiles": {
-          "contentFiles/any/any/_._": {
-            "buildAction": "None",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          }
-        }
-      },
-      "MonoGame.Extended.Content.Pipeline/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "Autofac": "5.2.0",
-          "MonoGame.Extended": "3.8.0",
-          "MonoGame.Extended.Tiled": "3.8.0",
-          "Newtonsoft.Json": "12.0.3"
-        },
-        "contentFiles": {
-          "contentFiles/any/netcoreapp3.1/CppNet.dll": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/SharpDX.D3DCompiler.dll": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/SharpDX.D3DCompiler.xml": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/SharpDX.dll": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/SharpDX.xml": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/libmojoshader_64.dll": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.deps.json": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.dll": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.exe": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.pdb": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.runtimeconfig.dev.json": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          },
-          "contentFiles/any/netcoreapp3.1/mgfxc.runtimeconfig.json": {
-            "buildAction": "Content",
-            "codeLanguage": "any",
-            "copyToOutput": false
-          }
-        }
-      },
-      "MonoGame.Extended.Graphics/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "MonoGame.Extended": "3.8.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/MonoGame.Extended.Graphics.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MonoGame.Extended.Graphics.dll": {}
-        }
-      },
-      "MonoGame.Extended.Tiled/3.8.0": {
-        "type": "package",
-        "dependencies": {
-          "MonoGame.Extended": "3.8.0",
-          "MonoGame.Extended.Graphics": "3.8.0"
-        },
-        "compile": {
-          "lib/netstandard2.0/MonoGame.Extended.Tiled.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MonoGame.Extended.Tiled.dll": {}
-        }
-      },
-      "MonoGame.Framework.DesktopGL/3.8.0.1641": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/MonoGame.Framework.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/MonoGame.Framework.dll": {}
-        },
-        "native": {
-          "runtimes/win-x64/native/SDL2.dll": {},
-          "runtimes/win-x64/native/soft_oal.dll": {}
-        },
-        "build": {
-          "build/MonoGame.Framework.DesktopGL.targets": {}
-        }
-      },
-      "Newtonsoft.Json/13.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
-        }
-      },
-      "System.Security.AccessControl/4.5.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.0.0",
-          "System.Security.Principal.Windows": "4.5.0"
-        },
-        "compile": {
-          "ref/netstandard2.0/System.Security.AccessControl.dll": {}
-        },
-        "runtime": {
-          "runtimes/win/lib/netcoreapp2.0/System.Security.AccessControl.dll": {}
-        }
-      },
-      "System.Security.Principal.Windows/4.5.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "2.0.0"
-        },
-        "compile": {
-          "ref/netstandard2.0/System.Security.Principal.Windows.dll": {}
-        },
-        "runtime": {
-          "runtimes/win/lib/netcoreapp2.0/System.Security.Principal.Windows.dll": {}
-        }
-      }
     }
   },
   "libraries": {
@@ -995,10 +777,6 @@
             "version": "[3.1.10, 3.1.10]"
           },
           {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[3.1.22, 3.1.22]"
-          },
-          {
             "name": "Microsoft.NETCore.App.Host.win-x64",
             "version": "[3.1.22, 3.1.22]"
           },
@@ -1007,16 +785,8 @@
             "version": "[3.1.0, 3.1.0]"
           },
           {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[3.1.22, 3.1.22]"
-          },
-          {
             "name": "Microsoft.WindowsDesktop.App.Ref",
             "version": "[3.1.0, 3.1.0]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[3.1.22, 3.1.22]"
           }
         ],
         "frameworkReferences": {
@@ -1025,11 +795,6 @@
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
-      }
-    },
-    "runtimes": {
-      "win-x64": {
-        "#import": []
       }
     }
   }

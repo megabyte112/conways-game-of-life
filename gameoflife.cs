@@ -31,7 +31,7 @@ namespace gameoflife
         MouseState mouse = Mouse.GetState();
         KeyboardState keyboard = Keyboard.GetState();
         static bool advance = false;
-        string status = "Waiting";
+        static string status = "Waiting";
         string savestatus;
         bool showcontrols = true;
         bool type;
@@ -473,7 +473,7 @@ namespace gameoflife
                 savestatus = "";
                 presscforcontrols = "";
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 1
                 Save(grid, "1");
@@ -483,7 +483,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 1
                 if (File.Exists("saves/1"))
@@ -496,7 +496,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 2
                 Save(grid, "2");
@@ -506,7 +506,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 2
                 if (File.Exists("saves/2"))
@@ -519,7 +519,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 3
                 Save(grid, "3");
@@ -529,7 +529,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 3
                 if (File.Exists("saves/3"))
@@ -542,7 +542,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 4
                 Save(grid, "4");
@@ -552,7 +552,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 4
                 if (File.Exists("saves/4"))
@@ -565,7 +565,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 5
                 Save(grid, "5");
@@ -575,7 +575,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 5
                 if (File.Exists("saves/5"))
@@ -588,7 +588,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 6
                 Save(grid, "6");
@@ -598,12 +598,12 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 6
-                if (File.Exists("6"))
+                if (File.Exists("saves/6"))
                 {
-                    grid = Load(grid, "saves/6");
+                    grid = Load(grid, "6");
                     savestatus = "Loaded from slot 6";
                     camera.Zoom = 0.2f;
                     camera.X = 3424;
@@ -611,7 +611,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 7
                 Save(grid, "7");
@@ -621,7 +621,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 7
                 if (File.Exists("saves/7"))
@@ -634,7 +634,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 8
                 Save(grid, "8");
@@ -644,7 +644,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 8
                 if (File.Exists("saves/8"))
@@ -657,7 +657,7 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // save to slot 9
                 Save(grid, "9");
@@ -667,7 +667,7 @@ namespace gameoflife
                 camera.Y = 1936;
                 advance = false;
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
                 // Load from slot 9
                 if (File.Exists("saves/9"))
@@ -680,24 +680,256 @@ namespace gameoflife
                     advance = false;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && !showcontrols)
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
-                // save to slot 0
-                Save(grid, "0");
-                savestatus = "Saved to slot 0";
+                // save to slot 10
+                Save(grid, "10");
+                savestatus = "Saved to slot 10";
                 camera.Zoom = 0.2f;
                 camera.X = 3424;
                 camera.Y = 1936;
                 advance = false;
                 
             }
-            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && !showcontrols)
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
-                // Load from slot 0
-                if (File.Exists("saves/0"))
+                // Load from slot 10
+                if (File.Exists("saves/10"))
                 {
-                    grid = Load(grid, "0");
-                    savestatus = "Loaded from slot 0";
+                    grid = Load(grid, "10");
+                    savestatus = "Loaded from slot 10";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 11
+                Save(grid, "11");
+                savestatus = "Saved to slot 11";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 11
+                if (File.Exists("saves/11"))
+                {
+                    grid = Load(grid, "11");
+                    savestatus = "Loaded from slot 11";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 12
+                Save(grid, "12");
+                savestatus = "Saved to slot 12";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D2) && !lastkeyboardupdate.IsKeyDown(Keys.D2) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 12
+                if (File.Exists("saves/12"))
+                {
+                    grid = Load(grid, "12");
+                    savestatus = "Loaded from slot 12";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 13
+                Save(grid, "13");
+                savestatus = "Saved to slot 13";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D3) && !lastkeyboardupdate.IsKeyDown(Keys.D3) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 13
+                if (File.Exists("saves/13"))
+                {
+                    grid = Load(grid, "13");
+                    savestatus = "Loaded from slot 13";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 14
+                Save(grid, "14");
+                savestatus = "Saved to slot 14";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D4) && !lastkeyboardupdate.IsKeyDown(Keys.D4) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 14
+                if (File.Exists("saves/14"))
+                {
+                    grid = Load(grid, "14");
+                    savestatus = "Loaded from slot 14";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 15
+                Save(grid, "15");
+                savestatus = "Saved to slot 15";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D5) && !lastkeyboardupdate.IsKeyDown(Keys.D5) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 15
+                if (File.Exists("saves/15"))
+                {
+                    grid = Load(grid, "15");
+                    savestatus = "Loaded from slot 15";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 16
+                Save(grid, "16");
+                savestatus = "Saved to slot 16";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D6) && !lastkeyboardupdate.IsKeyDown(Keys.D6) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 16
+                if (File.Exists("saves/16"))
+                {
+                    grid = Load(grid, "16");
+                    savestatus = "Loaded from slot 16";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 17
+                Save(grid, "17");
+                savestatus = "Saved to slot 17";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D7) && !lastkeyboardupdate.IsKeyDown(Keys.D7) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 17
+                if (File.Exists("saves/17"))
+                {
+                    grid = Load(grid, "17");
+                    savestatus = "Loaded from slot 17";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 18
+                Save(grid, "18");
+                savestatus = "Saved to slot 18";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D8) && !lastkeyboardupdate.IsKeyDown(Keys.D8) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 18
+                if (File.Exists("saves/18"))
+                {
+                    grid = Load(grid, "18");
+                    savestatus = "Loaded from slot 18";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 19
+                Save(grid, "19");
+                savestatus = "Saved to slot 19";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D9) && !lastkeyboardupdate.IsKeyDown(Keys.D9) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 19
+                if (File.Exists("saves/19"))
+                {
+                    grid = Load(grid, "19");
+                    savestatus = "Loaded from slot 19";
+                    camera.Zoom = 0.2f;
+                    camera.X = 3424;
+                    camera.Y = 1936;
+                    advance = false;
+                }
+            }
+            else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // save to slot 20
+                Console.WriteLine("keypress");
+                Save(grid, "20");
+                savestatus = "Saved to slot 20";
+                camera.Zoom = 0.2f;
+                camera.X = 3424;
+                camera.Y = 1936;
+                advance = false;
+                
+            }
+            else if (!keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D0) && !lastkeyboardupdate.IsKeyDown(Keys.D0) && keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
+            {
+                // Load from slot 20
+                if (File.Exists("saves/20"))
+                {
+                    grid = Load(grid, "20");
+                    savestatus = "Loaded from slot 20";
                     camera.Zoom = 0.2f;
                     camera.X = 3424;
                     camera.Y = 1936;
@@ -748,7 +980,7 @@ namespace gameoflife
                 cameracanmove = false;
                 UpdateDiscord(status);
             }
-            else if (keyboard.IsKeyDown(Keys.PageUp) && lastkeyboardupdate.IsKeyUp(Keys.PageUp))
+            if (keyboard.IsKeyDown(Keys.PageUp) && lastkeyboardupdate.IsKeyUp(Keys.PageUp))
             {
                 if (currentcolour < colours.Length-1)
                 {
@@ -759,7 +991,7 @@ namespace gameoflife
                     currentcolour = 0;
                 }
             }
-            else if (keyboard.IsKeyDown(Keys.PageDown) && lastkeyboardupdate.IsKeyUp(Keys.PageDown))
+            if (keyboard.IsKeyDown(Keys.PageDown) && lastkeyboardupdate.IsKeyUp(Keys.PageDown))
             {
                 if (currentbgcolour < bgcolours.Length-1)
                 {
@@ -921,6 +1153,8 @@ namespace gameoflife
             }
             bw.Close();
             stream.Close();
+            status = "Paused";
+            Console.WriteLine("saved");
         }
         static bool[,] Load(bool[,] grid, string slot)
         {
@@ -936,6 +1170,7 @@ namespace gameoflife
             }
             br.Close();
             stream.Close();
+            status = "Paused";
             return grid;
         }
         static bool[,] Gosper(bool[,] grid)
