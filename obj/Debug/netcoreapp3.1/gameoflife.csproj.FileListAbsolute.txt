@@ -50,7 +50,6 @@ C:\Users\aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\gam
 C:\Users\aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\gameoflife.dll
 C:\Users\aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\gameoflife.pdb
 C:\Users\aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\gameoflife.genruntimeconfig.cache
-C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\gosper.dat
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Autofac.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\MonoGame.Extended.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\MonoGame.Extended.Graphics.dll

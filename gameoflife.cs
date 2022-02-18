@@ -40,7 +40,6 @@ namespace gameoflife
         int startypos;
         int deltaxpos;
         int deltaypos;
-        Vector2 clickpos;
         Vector2 moved;
         Vector2 lastmoved;
         Vector2 deltamoved;
@@ -173,70 +172,167 @@ namespace gameoflife
                 }
                 savestatus = "";
             }
-            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift))
+            if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift) && !keyboard.IsKeyDown(Keys.LeftControl))
             {
-
-                // fix tomorrow
                 Vector2 distance = new Vector2(mouse.X, mouse.Y) - new Vector2(lastmousestate.X, lastmousestate.Y);
-                double diagonal = Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+                int diagonal = (int)Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+                if (diagonal != 0)
+                {
+                    for (int x = 1; x <= diagonal; x++)
+                    {
+                        // FIX
+                        float xpos = (lastmousestate.X+(((float)x/(float)diagonal)*distance.X));
+                        float ypos = (lastmousestate.Y+(((float)x/(float)diagonal)*distance.Y));
+                        mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
+                        cellx = (int)mouseworldpos.X;
+                        celly = (int)mouseworldpos.Y;
 
-                // remove
-                Console.WriteLine(diagonal);
-                
-                int numofpoints = (int)(diagonal/cellwidth);
-                if (numofpoints == 0)
-                {
-                    numofpoints = 1;
-                }
-                for (int x = 0; x < numofpoints; x++)
-                {
-                    float xpos = (int)(lastmousestate.X + (distance.X/(numofpoints*(x+1))));
-                    float ypos = (int)(lastmousestate.Y + (distance.Y/(numofpoints*(x+1))));
-                    mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
-                    cellx = (int)mouseworldpos.X;
-                    celly = (int)mouseworldpos.Y;
-                    if (cellx >= width-1)
-                    {
-                        cellx = width - 2;
+                        if (cellx >= width-1)
+                        {
+                            cellx = width - 2;
+                        }
+                        else if (cellx < 1)
+                        {
+                            cellx = 1;
+                        }
+                        if (celly >= height-1)
+                        {
+                            celly = height - 2;
+                        }
+                        else if (celly < 1)
+                        {
+                            celly = 1;
+                        }
+                        grid[celly, cellx] = type;
                     }
-                    else if (cellx < 1)
-                    {
-                        cellx = 1;
-                    }
-                    if (celly >= height-1)
-                    {
-                        celly = height - 2;
-                    }
-                    else if (celly < 1)
-                    {
-                        celly = 1;
-                    }
-                    grid[celly, cellx] = type;
                 }
             }
-            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && keyboard.IsKeyDown(Keys.LeftShift))
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && keyboard.IsKeyDown(Keys.LeftShift) && !keyboard.IsKeyDown(Keys.LeftControl))
             {
-                if (cellx >= width-1)
+                Vector2 distance = new Vector2(mouse.X, mouse.Y) - new Vector2(lastmousestate.X, lastmousestate.Y);
+                int diagonal = (int)Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+                if (diagonal != 0)
                 {
-                    cellx = width - 2;
-                }
-                else if (cellx < 1)
-                {
-                    cellx = 1;
-                }
-                if (celly >= height-1)
-                {
-                    celly = height - 2;
-                }
-                else if (celly < 1)
-                {
-                    celly = 1;
-                }
-                for (int x = -1; x < 2; x++)
-                {
-                    for (int y = -1; y < 2; y++)
+                    for (int x = 1; x <= diagonal; x++)
                     {
-                        grid[celly + y, cellx + x] = type;
+                        // FIX
+                        float xpos = (lastmousestate.X+(((float)x/(float)diagonal)*distance.X));
+                        float ypos = (lastmousestate.Y+(((float)x/(float)diagonal)*distance.Y));
+                        mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
+                        cellx = (int)mouseworldpos.X;
+                        celly = (int)mouseworldpos.Y;
+
+                        if (cellx >= width-1)
+                        {
+                            cellx = width - 2;
+                        }
+                        else if (cellx < 1)
+                        {
+                            cellx = 1;
+                        }
+                        if (celly >= height-1)
+                        {
+                            celly = height - 2;
+                        }
+                        else if (celly < 1)
+                        {
+                            celly = 1;
+                        }
+                        for (int z = -1; z < 2; z++)
+                        {
+                            for (int y = -1; y < 2; y++)
+                            {
+                                grid[celly + y, cellx + z] = type;
+                            }
+                        }
+                    }
+                }
+            }
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift) && keyboard.IsKeyDown(Keys.LeftControl))
+            {
+                Vector2 distance = new Vector2(mouse.X, mouse.Y) - new Vector2(lastmousestate.X, lastmousestate.Y);
+                int diagonal = (int)Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+                if (diagonal != 0)
+                {
+                    for (int x = 1; x <= diagonal; x++)
+                    {
+                        // FIX
+                        float xpos = (lastmousestate.X+(((float)x/(float)diagonal)*distance.X));
+                        float ypos = (lastmousestate.Y+(((float)x/(float)diagonal)*distance.Y));
+                        mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
+                        cellx = (int)mouseworldpos.X;
+                        celly = (int)mouseworldpos.Y;
+
+                        if (cellx >= width-1)
+                        {
+                            cellx = width - 2;
+                        }
+                        else if (cellx < 1)
+                        {
+                            cellx = 1;
+                        }
+                        if (celly >= height-1)
+                        {
+                            celly = height - 2;
+                        }
+                        else if (celly < 1)
+                        {
+                            celly = 1;
+                        }
+                        for (int z = -4; z < 5; z++)
+                        {
+                            for (int y = -4; y < 5; y++)
+                            {
+                                if (cellx+z < width-1 && cellx+z > 0 && celly+y < height-1 && celly+y > 0)
+                                {
+                                    grid[celly + y, cellx + z] = type;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && keyboard.IsKeyDown(Keys.LeftShift) && keyboard.IsKeyDown(Keys.LeftControl))
+            {
+                Vector2 distance = new Vector2(mouse.X, mouse.Y) - new Vector2(lastmousestate.X, lastmousestate.Y);
+                int diagonal = (int)Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+                if (diagonal != 0)
+                {
+                    for (int x = 1; x <= diagonal; x++)
+                    {
+                        // FIX
+                        float xpos = (lastmousestate.X+(((float)x/(float)diagonal)*distance.X));
+                        float ypos = (lastmousestate.Y+(((float)x/(float)diagonal)*distance.Y));
+                        mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
+                        cellx = (int)mouseworldpos.X;
+                        celly = (int)mouseworldpos.Y;
+
+                        if (cellx >= width-1)
+                        {
+                            cellx = width - 2;
+                        }
+                        else if (cellx < 1)
+                        {
+                            cellx = 1;
+                        }
+                        if (celly >= height-1)
+                        {
+                            celly = height - 2;
+                        }
+                        else if (celly < 1)
+                        {
+                            celly = 1;
+                        }
+                        for (int z = -9; z < 10; z++)
+                        {
+                            for (int y = -9; y < 10; y++)
+                            {
+                                if (cellx+z < width-1 && cellx+z > 0 && celly+y < height-1 && celly+y > 0)
+                                {
+                                    grid[celly + y, cellx + z] = type;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -283,9 +379,9 @@ namespace gameoflife
             }
             if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter))
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 1; y < height-1; y++)
                 {
-                    for (int x = 0; x < width; x++)
+                    for (int x = 1; x < width-1; x++)
                     {
                         if (r.Next(0,2) == 1)
                         {
@@ -663,9 +759,6 @@ namespace gameoflife
 
         protected override void Draw(GameTime gameTime)
         {
-            // ==========================================================================
-            // fix this
-            // ==========================================================================
             string info = "Status: "+status+"    Live: "+GetAlive(grid);
 
             GraphicsDevice.Clear(Color.Black);

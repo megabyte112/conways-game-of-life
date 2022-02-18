@@ -4,9 +4,9 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont</File>
-    <File>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/info.spritefont</File>
-    <File>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png</File>
+    <File>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont</File>
+    <File>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/info.spritefont</File>
+    <File>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
