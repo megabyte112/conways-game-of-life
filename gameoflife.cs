@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +19,7 @@ namespace gameoflife
         Random r = new Random();
         const int height = 242;
         const int width = 428;
-        float cellwidth = 16;
+        const float cellwidth = 16;
         bool[,] grid;
         int[,] adjacent;
         MouseState mouse = Mouse.GetState();
@@ -39,6 +40,7 @@ namespace gameoflife
         int startypos;
         int deltaxpos;
         int deltaypos;
+        Vector2 clickpos;
         Vector2 moved;
         Vector2 lastmoved;
         Vector2 deltamoved;
@@ -173,23 +175,44 @@ namespace gameoflife
             }
             else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift))
             {
-                if (cellx >= width-1)
+
+                // fix tomorrow
+                Vector2 distance = new Vector2(mouse.X, mouse.Y) - new Vector2(lastmousestate.X, lastmousestate.Y);
+                double diagonal = Math.Sqrt(Math.Pow(distance.X, 2) + Math.Pow(distance.Y, 2));
+
+                // remove
+                Console.WriteLine(diagonal);
+                
+                int numofpoints = (int)(diagonal/cellwidth);
+                if (numofpoints == 0)
                 {
-                    cellx = width - 2;
+                    numofpoints = 1;
                 }
-                else if (cellx < 1)
+                for (int x = 0; x < numofpoints; x++)
                 {
-                    cellx = 1;
+                    float xpos = (int)(lastmousestate.X + (distance.X/(numofpoints*(x+1))));
+                    float ypos = (int)(lastmousestate.Y + (distance.Y/(numofpoints*(x+1))));
+                    mouseworldpos = Vector2.Transform(new Vector2(xpos, ypos), Matrix.Invert(camera.Transform))/cellwidth;
+                    cellx = (int)mouseworldpos.X;
+                    celly = (int)mouseworldpos.Y;
+                    if (cellx >= width-1)
+                    {
+                        cellx = width - 2;
+                    }
+                    else if (cellx < 1)
+                    {
+                        cellx = 1;
+                    }
+                    if (celly >= height-1)
+                    {
+                        celly = height - 2;
+                    }
+                    else if (celly < 1)
+                    {
+                        celly = 1;
+                    }
+                    grid[celly, cellx] = type;
                 }
-                if (celly >= height-1)
-                {
-                    celly = height - 2;
-                }
-                else if (celly < 1)
-                {
-                    celly = 1;
-                }
-                grid[celly, cellx] = type;
             }
             else if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && keyboard.IsKeyDown(Keys.LeftShift))
             {
