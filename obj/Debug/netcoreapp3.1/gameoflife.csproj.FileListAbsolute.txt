@@ -58,3 +58,5 @@ C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\New
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\gosper
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\DiscordRPC.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\info.xnb
+C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\title.xnb
+C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\black.xnb
