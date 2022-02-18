@@ -246,3 +246,5 @@ C:\Users\Aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\win
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\obj\Debug\netcoreapp3.1\win-x64\gameoflife.genruntimeconfig.cache
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\info.xnb
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\DiscordRPC.dll
+C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\black.xnb
+C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\title.xnb

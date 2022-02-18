@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont</SourceFile>
+  <SourceFile>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/font.spritefont</SourceFile>
   <SourceTime>2022-02-06T13:23:34.5286282+00:00</SourceTime>
-  <DestFile>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/font.xnb</DestFile>
-  <DestTime>2022-02-18T20:25:15.0921443+00:00</DestTime>
+  <DestFile>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/font.xnb</DestFile>
+  <DestTime>2022-02-18T21:45:51.706421+00:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
