@@ -21,6 +21,7 @@ Left Click = Toggle cell state
 F11 = Toggle Fullscreen/Windowed mode
 
 Delete = Low Framerate Mode
+ (Good for lower end machines)
 
 C = Show Basic Controls
 
@@ -29,13 +30,13 @@ Esc = Exit
 
 # Save/Loading
 
-Ctrl + 0=9 = Save Current State (1=10)
+Ctrl + 0=9 = Save Current State (1-10)
 
-0=9 = Load Saved State (1=10)
+0=9 = Load Saved State (1-10)
 
-Ctrl + Shift + 1=9 = Save Current State (11=19)
+Ctrl + Shift + 1=9 = Save Current State (11-19)
 
-Shift + 1=9 = Load Saved State (11=19)
+Shift + 1=9 = Load Saved State (11-19)
 
 
 # While Paused
