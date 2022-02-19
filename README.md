@@ -1,3 +1,5 @@
+![Icon](https://user-images.githubusercontent.com/74556753/154779241-738bc26b-caba-4cbe-9af5-23bb79b75892.png)
+
 # Conway's Game of Life
 Conway's Game of Life, made using Monogame and C#
 
