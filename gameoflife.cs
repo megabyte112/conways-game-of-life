@@ -1026,7 +1026,7 @@ namespace gameoflife
             }
             if (keyboard.IsKeyDown(Keys.F1) && lastkeyboardupdate.IsKeyUp(Keys.F1))
             {
-                Process.Start("explorer", "https://github.com/megabyte112/conways-game-of-life/blob/main/README.md");
+                Process.Start("explorer", "https://github.com/megabyte112/conways-game-of-life/blob/main/Controls.md");
             }
             if (mouse.ScrollWheelValue > lastmousestate.ScrollWheelValue && cellwidth > 4 && !showcontrols)
             {
