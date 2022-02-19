@@ -54,7 +54,7 @@ namespace gameoflife
         bool islowframerate;
         const double defaultfps = 60d;
         double targetfps;
-        DiscordRPC.DiscordRpcClient client;
+        static DiscordRPC.DiscordRpcClient client;
         int stepcount;
         string controlsmessage = @"
                 Basic Controls:
@@ -112,6 +112,11 @@ namespace gameoflife
             islowframerate = false;
             targetfps = defaultfps;
             stepcount = 0;
+            if (File.Exists("saves/auto"))
+            {
+                Load(grid, "auto");
+                savestatus = "Loaded Autosave";
+            }
             base.Initialize();
         }
 
@@ -167,6 +172,8 @@ namespace gameoflife
             if (!advance && !showcontrols && keyboard.IsKeyDown(Keys.RightShift) && lastkeyboardupdate.IsKeyUp(Keys.RightShift))
             {
                 // step
+                status = "Stepping";
+                UpdateDiscord(status);
                 stepcount = 0;
                 adjacent = GetAdjacent(grid);
                 for (int y = 0; y < height; y++)
@@ -247,7 +254,9 @@ namespace gameoflife
                 }
                 type = grid[celly, cellx];
                 savestatus = "";
-                if (status == "Waiting") status = "Paused";
+                if (status == "Waiting") status = "Drawing";
+                else if (status == "Stepping") status = "Drawing";
+                UpdateDiscord(status);
             }
             if (mouse.LeftButton == ButtonState.Pressed && !advance && !showcontrols && !keyboard.IsKeyDown(Keys.LeftShift) && !keyboard.IsKeyDown(Keys.LeftControl))
             {
@@ -456,7 +465,8 @@ namespace gameoflife
             if (keyboard.IsKeyDown(Keys.Enter) && !lastkeyboardupdate.IsKeyDown(Keys.Enter))
             {
                 advance = false;
-                status = "Paused";
+                status = "Drawing";
+                UpdateDiscord(status);
                 for (int y = 1; y < height-1; y++)
                 {
                     for (int x = 1; x < width-1; x++)
@@ -493,12 +503,12 @@ namespace gameoflife
                 {
                     camera.Zoom = 0.18f;
                     showcontrols = false;
-                    status = "Paused";
+                    status = "Drawing";
                 }
                 else if (advance)
                 {
                     advance = false;
-                    status = "Paused";
+                    status = "Drawing";
                 }
                 else
                 {
@@ -519,7 +529,8 @@ namespace gameoflife
                 }
                 savestatus = "";
                 advance = false;
-                status = "Paused";
+                status = "Drawing";
+                UpdateDiscord(status);
             }
             else if (keyboard.IsKeyDown(Keys.LeftControl) && keyboard.IsKeyDown(Keys.D1) && !lastkeyboardupdate.IsKeyDown(Keys.D1) && !keyboard.IsKeyDown(Keys.LeftShift) && !showcontrols)
             {
@@ -966,7 +977,7 @@ namespace gameoflife
                 camera.Zoom = 0.2f;
                 camera.X = 3424;
                 camera.Y = 1936;
-                advance = true;
+                UpdateDiscord(status);
             }
             else if (keyboard.IsKeyDown(Keys.F11) && !lastkeyboardupdate.IsKeyDown(Keys.F11))
             {
@@ -1128,6 +1139,17 @@ namespace gameoflife
 
             base.Draw(gameTime);
         }
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            Save(grid, "auto");
+            client.Dispose();
+            square.Dispose();
+            title.Dispose();
+            black.Dispose();
+            _spriteBatch.Dispose();
+            _graphics.Dispose();
+            base.OnExiting(sender, args);
+        }
         static int GetAlive(bool[,] grid)
         {
             int alive = 0;
@@ -1179,7 +1201,8 @@ namespace gameoflife
             }
             bw.Close();
             stream.Close();
-            status = "Paused";
+            status = "Drawing";
+            UpdateDiscord(status);
         }
         static bool[,] Load(bool[,] grid, string slot)
         {
@@ -1195,7 +1218,8 @@ namespace gameoflife
             }
             br.Close();
             stream.Close();
-            status = "Paused";
+            status = "Drawing";
+            UpdateDiscord(status);
             return grid;
         }
         static bool[,] Gosper(bool[,] grid)
@@ -1214,10 +1238,12 @@ namespace gameoflife
                     grid[y, x] = gosper.grid[y, x];
                 }
             }
-            advance = true;
+            advance = false;
+            status = "Drawing";
+            UpdateDiscord(status);
             return grid;
         }
-        void UpdateDiscord(string status)
+        static void UpdateDiscord(string status)
         {
             client.SetPresence(new DiscordRPC.RichPresence()
             {

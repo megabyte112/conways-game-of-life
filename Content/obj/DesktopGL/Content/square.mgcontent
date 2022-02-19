@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png</SourceFile>
+  <SourceFile>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/square.png</SourceFile>
   <SourceTime>2022-02-02T22:25:45.6539723+00:00</SourceTime>
-  <DestFile>c:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/square.xnb</DestFile>
-  <DestTime>2022-02-19T00:42:25.4822267+00:00</DestTime>
+  <DestFile>C:/Users/Aidan/Documents/GitHub/conways-game-of-life/Content/bin/DesktopGL/Content/square.xnb</DestFile>
+  <DestTime>2022-02-19T12:15:11.5231501+00:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T17:17:54+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

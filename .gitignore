@@ -2,3 +2,4 @@ bin
 .vscode
 saves
 Content/bin
+*.mgstats
