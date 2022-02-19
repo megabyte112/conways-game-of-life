@@ -1,5 +1,4 @@
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\font.xnb
-C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\gosper
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\Content\square.xnb
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\gameoflife.exe
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\win-x64\gameoflife.deps.json
