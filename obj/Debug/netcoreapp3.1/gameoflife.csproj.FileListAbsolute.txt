@@ -55,7 +55,6 @@ C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Mon
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\MonoGame.Extended.Graphics.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\MonoGame.Extended.Tiled.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
-C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\gosper
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\DiscordRPC.dll
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\info.xnb
 C:\Users\Aidan\Documents\GitHub\conways-game-of-life\bin\Debug\netcoreapp3.1\Content\title.xnb
