@@ -57,6 +57,8 @@ Shift + Ctrl = Massive Brush
 
 # Other
 
+Right Shift = Hold
+
 PageUp = Change Live Cell Colour
 
 PageDown = Change Background Colour
