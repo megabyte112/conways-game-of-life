@@ -145,7 +145,7 @@ namespace gameoflife
             camera.MoveVector(-deltamoved * (1/camera.Zoom));
             camera.Update();
             
-            if (advance && count == targetfps/15)    // only run 15 times a second
+            if (advance && count == targetfps/15 && keyboard.IsKeyUp(Keys.RightShift))    // only run 15 times a second
             {
                 adjacent = GetAdjacent(grid);
                 status = "Running";
@@ -168,6 +168,10 @@ namespace gameoflife
                         }
                     }
                 }
+            }
+            else if (advance && keyboard.IsKeyDown(Keys.RightShift))
+            {
+                status = "Holding";
             }
             if (!advance && !showcontrols && keyboard.IsKeyDown(Keys.RightShift) && lastkeyboardupdate.IsKeyUp(Keys.RightShift))
             {
@@ -494,7 +498,6 @@ namespace gameoflife
             else if (keyboard.IsKeyDown(Keys.Space) && !lastkeyboardupdate.IsKeyDown(Keys.Space))
             {
                 // toggle pause
-                
                 if (!showcontrols)
                 {
                     savestatus = "";
